@@ -1,0 +1,123 @@
+const Discord = require("discord.js");
+const Client = new Discord.Client();
+const prefix = "!";
+
+
+Client.on("ready", () =>{
+  console.log("Bot ta on");
+})
+Client.on('message',(message)=>{
+   if(!message.content.startsWith(prefix)) return;
+
+   Client.on("guildMemberAdd",function(member){
+       member.send("Bem vindo ao Server :D");
+       let memberRole = member.guild.roles.find('name', "VISITANTES");
+       member.addRole(memberRole);
+   })
+   if(message.content.startsWith(prefix + "regras")){
+       message.channel.send("As regras foram enviadas no seu privado " + message.author + (" :sunglasses::call_me:"));
+       message.author.send(
+        "REGRAS GERAIS : " +   "\n" +  
+        
+        "1.1 Respeite todos os membros, xingamentos e ofensas não serão tolerados" 
+       + "\n" 
+       + 
+       "1.2 Não pertube nos canais de voz, gritos, ruidos propositais ou qualquer tipo de barulho irritante é proibido" 
+       + "\n" 
+       +
+       "1.3 Racismo, homofobia, machismo ou qualquer outro tipo de preconceito é inaceitável, banimento instantâneo, quer seja zoeira ou não" 
+       + "\n\n" + 
+       
+       "NÃO É PERMITIDO NOS CANAIS DE TEXTO" + 
+       "\n" + 
+       "2.1 Qualquer tipo de spam, flood, correntes ou flame." + 
+       "\n" + 
+       "2.2 Divulgação/conversar sobre conteúdo mal intencionado (incluindo, mas não limitado a: vírus, keyloggers, programas ilegais, sites de phishing, venda de serviços, etc)" +
+       "\n" + 
+       "2.3 Divulgação de imagens 18+, gore ou  mensagem de ódio" + 
+       "\n" + 
+       "2.4 Utilizar o servidor para discutir, apresentar ou divulgar assuntos políticos" + 
+
+       "\n" + 
+       "2.5 Usar palavreado chulo/de cunho sexual, agressivo, gatilho e abusivo." +
+       " ")
+   }
+   if(message.content.startsWith(prefix + "comandos")){
+       message.channel.send("!regras, !limpar")
+   }
+   if(message.content.startsWith(prefix + "WC")){
+    let memberRole = message.member.guild.roles.find('name', "VISITANTES");
+    message.member.addRole(memberRole);
+   }
+   if(message.content.startsWith(prefix + "ban")){
+       
+    
+    let banuser = message.guild.member(message.mentions.users.first() );
+       if(!banuser) return message.channel.send("Não existe o usuario")
+      
+       if(!message.member.hasPermission("MANAGE_ROLES")) return message.channel.send("Você não consegue")
+       
+       let banember = new Discord.RichEmbed()
+       .setDescription("BANIMENTO")
+       .setColor("0x54af26")
+       .addField("Banido usuario", banuser)
+       .addField("Banido por", message.author)
+       .addField("Banido no canal", message.channel)
+       .addField("Horario", message.channelArt)
+       let banimentoCanal = message.guild.channels.find('name', "banimentos");
+       if(!banimentoCanal) return message.channel.send("Não consegue achar o acnal")
+       message.guild.member(banuser)
+       banuser.ban();
+       banimentoCanal.send(banember);
+
+
+
+
+
+       return
+
+
+    
+       
+       
+   }
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+   
+   
+   if (message.content.startsWith(prefix + "limpar")){
+       let args = message.content.split(" ").slice(1);
+       
+       if(!args[0]){
+           message.delete();
+           
+           return;
+        }
+        if(args[0] > 500){
+            message.delete();
+            
+            return;
+        }
+      message.delete();
+      message.channel.bulkDelete(args[0]);
+      message.channel.send({embed:{
+          color: 0x54af26,
+          description: "Deletado " + args[0] + " messagens."
+      }})
+      return;
+   }
+})
+Client.login("NTAyMTczNzU1NTMyMTE1OTg4.DqkFeQ.Q32KTFG1NSzKmPmA_yQiep1GIoI")
